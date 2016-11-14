@@ -1,11 +1,12 @@
 from flask import Flask
-from flask import make_response
+from flask_script import Manager
 
 app = Flask(__name__)
+manager = Manager(app)
 
-# how to set cookie
 @app.route('/')
 def index():
-    response = make_response('<h1>This document carries a cookie!</h1>')
-    response.set_cookie('answer','42')
-    return response
+    return "<h1>Hello World!</h1>"
+
+if __name__ == '__main__':
+    manager.run()
