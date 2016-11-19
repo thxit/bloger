@@ -110,12 +110,15 @@ def send_email(to,subject,template,**kwargs):
                   sender=app.config['BLOGER_MAIL_SENDER'],recipients=[to])
     msg.body = render_template(template+'.txt',**kwargs)
     msg.html = render_template(template+'.html',**kwargs)
-    mail.send(msg)
+    thr = Thread(target=send_async_email, args=[app, msg])
+    thr.start()
+    return thr
+
 
 # 异步发送电子邮件
 def send_async_email(app,msg):
     with app.app_context():
-        send_email(msg)
+        mail.send(msg)
 
 
 def make_shell_context():    # 将对象添加到导入列表中并且自动导入
