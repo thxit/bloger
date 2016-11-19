@@ -14,6 +14,7 @@ from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, MigrateCommand
 from flask_mail import Mail, Message
+from threading import Thread
 import os
 
 app = Flask(__name__)
@@ -46,13 +47,6 @@ app.config['BLOGER_MAIL_SENDER'] = os.environ.get('BLOGER_MAIL_SENDER')
 app.config['BLOGER_ADMIN'] = os.environ.get('BLOGER_ADMIN')
 # mail应该放到config后面，不然会报拒绝连接的错误
 mail = Mail(app)
-
-def send_email(to,subject,template,**kwargs):
-    msg = Message(app.config['BLOGER_MAIL_SUBJECT_PREFIX'] + subject,
-                  sender=app.config['BLOGER_MAIL_SENDER'],recipients=[to])
-    msg.body = render_template(template+'.txt',**kwargs)
-    msg.html = render_template(template+'.html',**kwargs)
-    mail.send(msg)
 
 
 class NameForm(Form):
@@ -111,10 +105,24 @@ def user(name):
     return render_template('user.html', name=name)
 
 
+def send_email(to,subject,template,**kwargs):
+    msg = Message(app.config['BLOGER_MAIL_SUBJECT_PREFIX'] + subject,
+                  sender=app.config['BLOGER_MAIL_SENDER'],recipients=[to])
+    msg.body = render_template(template+'.txt',**kwargs)
+    msg.html = render_template(template+'.html',**kwargs)
+    mail.send(msg)
+
+# 异步发送电子邮件
+def send_async_email(app,msg):
+    with app.app_context():
+        send_email(msg)
+
+
 def make_shell_context():    # 将对象添加到导入列表中并且自动导入
     return dict(app=app,db=db,User=User,Role=Role)
 manager.add_command("shell", Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
+
 
 
 
