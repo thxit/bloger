@@ -6,6 +6,7 @@ from .forms import LoginForm,RegistrationForm
 from ..models import User
 from .. import db
 
+
 @auth.route('/login',methods=['GET','POST'])
 def login():
     form = LoginForm()
@@ -18,6 +19,7 @@ def login():
         flash('无效的用户名或密码')
     return render_template('auth/login.html',form=form)
 
+
 @auth.route('/logout',methods=['GET','POST'])
 @login_required
 def logout():
@@ -26,7 +28,7 @@ def logout():
     return redirect(url_for('main.index'))
 
 
-@auth.route('/register',method=['GET','POST'])
+@auth.route('/register',methods=['GET','POST'])
 def register():
     form=RegistrationForm()
     if form.validate_on_submit():

@@ -32,7 +32,7 @@ def create_app(config_name):
     app.register_blueprint(main_blueprint)
     from .auth import auth as auth_blueprint
     # url_prefix为所定义的路由添加制定前缀
-    app.register_blueprint(auth_blueprint, url_prefic='/auth')
+    app.register_blueprint(auth_blueprint, url_prefix='/auth')
 
     return app
 
