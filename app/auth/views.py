@@ -38,4 +38,10 @@ def register():
         db.session.add(user)
         flash('你已经可以登录了')
         redirect(url_for('auth.login'))
-    return render_template('auth/register',form=form)
+    return render_template('auth/register.html',form=form)
+
+# 更新已登录用户的访问时间
+@auth.before_app_request
+def before_app():
+    if current_user.is_authenticated:
+        current_user.ping()

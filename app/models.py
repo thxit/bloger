@@ -1,6 +1,7 @@
 # coding=utf-8
 from . import db
 from flask import current_app
+from flask_moment import datetime
 from . import login_manager
 from flask_login import UserMixin, AnonymousUserMixin
 from flask_login import login_required
@@ -61,6 +62,8 @@ class User(UserMixin,db.Model):
     # 每个用户只能有一个角色
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     password_hash = db.Column(db.String(128))
+    member_since = db.Column(db.DateTime(),default=datetime.utcnow)
+    last_seen = db.Column(db.DateTime(),default=datetime.utcnow)
 
     def __init__(self,**kwargs):
         super(User,self).__init__(**kwargs)
@@ -88,6 +91,11 @@ class User(UserMixin,db.Model):
 
     def is_administrator(self):
         return self.can(Permission.ADMINISTER)
+
+    # 刷新用户的最后访问时间
+    def ping(self):
+        self.last_seen=datetime.utcnow()
+        db.session.add(self)
 
     def __repr__(self):
         return '<User % r>' % self.username

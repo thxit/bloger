@@ -20,7 +20,7 @@ class RegistrationForm(Form):
                                                                                   '账户名不能为空')])
     password = PasswordField('密码', validators =[
         DataRequired(), EqualTo('password2',message='密码必须匹配')])
-    password2 = PasswordField('确定密码， validators=[DataRequired()]')
+    password2 = PasswordField('确定密码', validators=[DataRequired()])
     submit = SubmitField('注册')
 
     def validate_email(self,field):
