@@ -59,4 +59,6 @@
 {% block scripts %}
 {{ super() }}
 {{ moment.include_moment() }}
+<!-- 时间字符中文化-->
+{{ moment.lang('Zh-cn') }}
 {% endblock %}

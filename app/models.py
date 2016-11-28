@@ -1,5 +1,7 @@
 # coding=utf-8
 from . import db
+import hashlib
+from flask import request
 from flask import current_app
 from flask_moment import datetime
 from . import login_manager
@@ -64,6 +66,12 @@ class User(UserMixin,db.Model):
     password_hash = db.Column(db.String(128))
     member_since = db.Column(db.DateTime(),default=datetime.utcnow)
     last_seen = db.Column(db.DateTime(),default=datetime.utcnow)
+    name = db.Column(db.String(64))
+    location = db.Column(db.String(64))
+    about_me = db.Column(db.Text())
+    avatar_hash=db.Column(db.String(64))
+
+
 
     def __init__(self,**kwargs):
         super(User,self).__init__(**kwargs)
@@ -72,6 +80,8 @@ class User(UserMixin,db.Model):
                 self.role = Role.query.filter_by(permissions=0xff).first()
             if self.role is None:
                 self.role = Role.query.filter_by(default=True).first()
+        if self.email is not None and self.avatar_hash is None:
+            avatar_hash = hashlib.md5(self.email.encode('utf-8')).hexdigest()
 
     @property
     def password(self):
@@ -96,6 +106,15 @@ class User(UserMixin,db.Model):
     def ping(self):
         self.last_seen=datetime.utcnow()
         db.session.add(self)
+
+    def gravatar(self,size=100,default='identicon',rating='g',):
+        if request.is_secure:
+            url="https://secure.gravatar.com/avatar"
+        else:
+            url="http://cn.gravatar.com/avatar"
+        hash = self.avatar_hash or hashlib.md5(self.email.encode('utf-8')).hexdigest()
+        return '{url}/{hash}?s={size}&d={default}&r={rating}'.format(
+            url=url,size=size,rating=rating,default=default,hash=hash)
 
     def __repr__(self):
         return '<User % r>' % self.username
