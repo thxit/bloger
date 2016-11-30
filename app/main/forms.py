@@ -2,6 +2,7 @@
 from flask_wtf import Form
 from wtforms import StringField, SubmitField,TextAreaField, SelectField
 from wtforms.validators import DataRequired,Length
+from flask_pagedown.fields import PageDownField
 
 
 class NameForm(Form):
@@ -17,5 +18,5 @@ class EditProfileForm(Form):
 
 
 class PostForm(Form):
-    body = TextAreaField('你想写点什么吗？',validators=[DataRequired()])
+    body = PageDownField('你想写点什么吗？',validators=[DataRequired()])
     submit = SubmitField('确定')

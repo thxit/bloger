@@ -40,7 +40,9 @@
                         账号 <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="{{ url_for('auth.logout') }}">退出</a></li>
+                        <li>
+                            <a href="{{ url_for('auth.logout') }}">
+                                <span class="glyphicon glyphicon-log-out">  退出</span></a></li>
                     </ul>
                 </li>
                 {% else %}
