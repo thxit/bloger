@@ -11,7 +11,14 @@
   {% else %}
   <P>欢迎回来</P>
   {% endif %}
- </div>
+</div>
+<div>
+  {% if current_user.can(Permission.WRITE_ARTICLES) %}
+  {{ wtf.quick_form(form) }}
+  {% endif %}
+</div>
+{% include '_posts.html' %}
+
 
 {% endblock %}
 

@@ -7,7 +7,6 @@
 <div class="page-header">
     <img class="img-rounded profile-thumbnail" src="{{ user.gravatar(size=256) }}">
     <div class="profile-header">
-
         <h1>{{ user.username }}</h1>
         {% if user.name or user.location %}
         <p>
@@ -31,6 +30,8 @@
             {% endif %}
 
         </p>
+        <h3>{{ user.username }}的文章</h3>
+        {% include '_posts.html' %}
   </div>
 </div>
 {% endblock %}

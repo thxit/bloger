@@ -14,3 +14,8 @@ class EditProfileForm(Form):
     location = StringField('地址',validators=[DataRequired()])
     about_me = TextAreaField('个人介绍')
     submit = SubmitField('确定')
+
+
+class PostForm(Form):
+    body = TextAreaField('你想写点什么吗？',validators=[DataRequired()])
+    submit = SubmitField('确定')
