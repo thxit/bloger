@@ -8,7 +8,7 @@ from . import main
 
 # app_errorhandler用来注册全局的错误程序
 @main.app_errorhandler(404)
-def page_not_found():
+def page_not_found(e):
     # 返回一个状态码
     return render_template('404.html'), 404
 

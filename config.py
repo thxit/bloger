@@ -24,6 +24,7 @@ class Config:
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = 'obkmslncckjaeiac'
     BLOGER_POSTS_PER_PAGE = 20
+    BLOGER_FOLLOWERS_PER_PAGE = 50
 
     @staticmethod
     def init_app(app):
